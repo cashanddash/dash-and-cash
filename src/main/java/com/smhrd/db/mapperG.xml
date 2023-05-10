@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smhrd.db.mapperG">
+<!-- 장예지 -->
+
+<!-- 로그인  -->
+<select id="login" resultType="com.smhrd.model.userVO" parameterType="com.smhrd.model.userVO">
+select * from tb_user where user_id=#{user_id} and user_pw=#{user_pw}
+</select>
+
+<!--회원정보 수정 -->
+<update id="update" parameterType="com.smhrd.model.userVO">
+update tb_user set user_salary = #{user_salary} ,user_nick = #{user_nick} where user_id = #{user_id}
+</update>
+
+<!--내역조회 -->
+<select id="list" resultType="com.smhrd.model.income_expenseVO" parameterType="String">
+select *from tb_income_expense where user_id=#{user_id}
+</select>
+
+<!--내자산 조회  -->
+<select id="asset" resultType="com.smhrd.model.assetVO" parameterType="String">
+select * from tb_asset where user_id =#{user_id}
+</select>
+
+<!--tag 가져오기  -->
+<select id="taglist" resultType="com.smhrd.model.income_expenseVO" parameterType="String">
+select * from tb_income_expense where user_id =#{user_id}
+</select>
+
+<!--20대 월별 소비량 가져오기  -->
+<select id="avg_20" resultType="com.smhrd.model.AgeMonthVO" >
+select mon,user_age,round(AVG(age_avg),0) as age_month
+from(
+select * from(
+select
+  case
+when substr(a.item_dt,6,2)='01' then '01월'
+when substr(a.item_dt,6,2)='02' then '02월'
+when substr(a.item_dt,6,2)='03' then '03월'
+when substr(a.item_dt,6,2)='04' then '04월'
+when substr(a.item_dt,6,2)='05' then '05월'
+when substr(a.item_dt,6,2)='06' then '06월'
+when substr(a.item_dt,6,2)='07' then '07월'
+when substr(a.item_dt,6,2)='08' then '08월'
+when substr(a.item_dt,6,2)='09' then '09월'
+when substr(a.item_dt,6,2)='10' then '10월'
+when substr(a.item_dt,6,2)='11' then '11월'
+when substr(a.item_dt,6,2)='12' then '12월'
+end as mon,
+CASE 
+  WHEN b.user_age BETWEEN 20 AND 29 THEN '20대'
+END AS user_age,
+round(AVG(a.amount),0) AS age_avg 
+  FROM tb_Income_Expense a,tb_user b 
+  where a.user_id =b.user_id
+  GROUP BY a.item_dt,b.user_age)
+where user_age is not null)
+group by user_age,mon order by mon asc
+
+</select>
+<!--30대 월별 소비량 가져오기  -->
+<select id="avg_30" resultType="com.smhrd.model.AgeMonthVO">
+select mon,user_age,round(AVG(age_avg),0) as age_month
+from(
+select * from(
+select
+  case
+when substr(a.item_dt,6,2)='01' then '01월'
+when substr(a.item_dt,6,2)='02' then '02월'
+when substr(a.item_dt,6,2)='03' then '03월'
+when substr(a.item_dt,6,2)='04' then '04월'
+when substr(a.item_dt,6,2)='05' then '05월'
+when substr(a.item_dt,6,2)='06' then '06월'
+when substr(a.item_dt,6,2)='07' then '07월'
+when substr(a.item_dt,6,2)='08' then '08월'
+when substr(a.item_dt,6,2)='09' then '09월'
+when substr(a.item_dt,6,2)='10' then '10월'
+when substr(a.item_dt,6,2)='11' then '11월'
+when substr(a.item_dt,6,2)='12' then '12월'
+end as mon,
+CASE 
+  WHEN b.user_age BETWEEN 30 AND 39 THEN '30대'
+END AS user_age,
+round(AVG(a.amount),0) AS age_avg 
+  FROM tb_Income_Expense a,tb_user b 
+  where a.user_id =b.user_id
+  GROUP BY a.item_dt,b.user_age)
+where user_age is not null)
+group by user_age,mon order by mon asc
+</select>
+<!--40대 소비량 가지오기  -->
+<select id="avg_40" resultType="com.smhrd.model.AgeMonthVO">
+select mon,user_age,round(AVG(age_avg),0) as age_month
+from(
+select * from(
+select
+  case
+when substr(a.item_dt,6,2)='01' then '01월'
+when substr(a.item_dt,6,2)='02' then '02월'
+when substr(a.item_dt,6,2)='03' then '03월'
+when substr(a.item_dt,6,2)='04' then '04월'
+when substr(a.item_dt,6,2)='05' then '05월'
+when substr(a.item_dt,6,2)='06' then '06월'
+when substr(a.item_dt,6,2)='07' then '07월'
+when substr(a.item_dt,6,2)='08' then '08월'
+when substr(a.item_dt,6,2)='09' then '09월'
+when substr(a.item_dt,6,2)='10' then '10월'
+when substr(a.item_dt,6,2)='11' then '11월'
+when substr(a.item_dt,6,2)='12' then '12월'
+end as mon,
+CASE 
+  WHEN b.user_age BETWEEN 40 AND 49 THEN '40대'
+END AS user_age,
+round(AVG(a.amount),0) AS age_avg 
+  FROM tb_Income_Expense a,tb_user b 
+  where a.user_id =b.user_id
+  GROUP BY a.item_dt,b.user_age)
+where user_age is not null)
+group by user_age,mon order by mon asc
+</select>
+<!--50대 소비량 가지오기  -->
+<select id="avg_50" resultType="com.smhrd.model.AgeMonthVO">
+select mon,user_age,round(AVG(age_avg),0) as age_month
+from(
+select * from(
+select
+  case
+when substr(a.item_dt,6,2)='01' then '01월'
+when substr(a.item_dt,6,2)='02' then '02월'
+when substr(a.item_dt,6,2)='03' then '03월'
+when substr(a.item_dt,6,2)='04' then '04월'
+when substr(a.item_dt,6,2)='05' then '05월'
+when substr(a.item_dt,6,2)='06' then '06월'
+when substr(a.item_dt,6,2)='07' then '07월'
+when substr(a.item_dt,6,2)='08' then '08월'
+when substr(a.item_dt,6,2)='09' then '09월'
+when substr(a.item_dt,6,2)='10' then '10월'
+when substr(a.item_dt,6,2)='11' then '11월'
+when substr(a.item_dt,6,2)='12' then '12월'
+end as mon,
+CASE 
+  WHEN b.user_age BETWEEN 50 AND 59 THEN '50대'
+END AS user_age,
+round(AVG(a.amount),0) AS age_avg 
+  FROM tb_Income_Expense a,tb_user b 
+  where a.user_id =b.user_id
+  GROUP BY a.item_dt,b.user_age)
+where user_age is not null)
+group by user_age,mon order by mon asc
+</select>
+</mapper>

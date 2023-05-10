@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smhrd.db.mapperS">
+	<!-- 김선미 -->
+
+	<select id="ietgroupSelects" resultType="com.smhrd.model.income_expenseVO" parameterType="String">
+		SELECT user_id as user_id ,ITEM_TYPE as item_type ,ITEM_TAG as item_tag ,sum(Amount) as Amount
+		FROM tb_income_expense where user_id = #{user_id} and (ITEM_TAG !=
+		'상환' )and (ITEM_TAG != '기타')GROUP by user_id,ITEM_TYPE, ITEM_TAG ORDER BY Amount desc
+	</select>
+
+<select id="iegroupdtSelects" resultType="com.smhrd.model.income_expenseVO" parameterType="String">
+select  item_dt as item_dt ,sum(amount) as amount from tb_income_expense where user_id=#{user_id} and item_type = '지출' and (ITEM_TAG !=
+		'상환' )and (ITEM_TAG != '기타') group by item_dt
+
+</select>
+
+<select id="iegroupTagSelects" resultType="com.smhrd.model.income_expenseVO" parameterType="com.smhrd.model.income_expenseVO">
+   select  item_dt as item_dt ,sum(amount) as amount from tb_income_expense where user_id=#{user_id} and item_type = '지출' and (ITEM_TAG !=
+		'상환' )and (ITEM_TAG != '기타') and (ITEM_TAG =#{item_tag}  group by item_dt
+</select>
+
+</mapper>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com/smhrd/db/vbdmapper.xml" >
+
+<!-- 은행 가상데이터 insert  -->
+<insert id="vdInsert" parameterType="com.smhrd.virtualData.bankVO">
+ insert into virtualBank values (mbseq.NEXTVAL,#{VB_id},#{VB_Date},#{code_Type},
+ 								#{BankName},#{Deposit_Withdrawal},#{Detail},#{AccountAmount})
+</insert>
+
+
+<!-- tb_user 테이블에서 회원명 select  -->
+<select id="userNameSelect" resultType="String">
+	select USER_id FROM tb_user
+</select>
+
+
+<!-- tb_target 테이블에서 목표명 select -->
+<select id="targetNameSelect"  parameterType="String" resultType="String">
+	SELECT TARGET_NAME from tb_target where user_id = #{user_id}
+</select>
+
+<select id="user_salarySelectVB"  resultType="Integer" parameterType="String">
+ select USER_SALARY from tb_user where user_id = #{user_id}
+</select>
+
+<!-- 가상데이터 테이블에서 입지출테이블로 insert  -->
+<insert id="tb_in_exInsertvb" parameterType="com.smhrd.model.income_expenseVO">
+ insert into tb_income_expense values (TB_INCOME_EXPENSE_SEQ.NEXTVAL,#{item_type},#{item_content},#{amount},#{item_tag},#{item_dt},#{user_id})
+</insert>
+
+<!-- 가상데이터 테이블  select-->
+<select id="vbtSelectvb" resultType="com.smhrd.virtualData.bankVO" parameterType="String">
+	select * FROM virtualBank where VB_ID = #{user_id}
+</select>
+
+<!-- 가상데이터 테이블에서 회원별 자산 select-->
+<select id="groupby3Selectvb" resultType="com.smhrd.virtualData.bankVO" parameterType="String">
+SELECT vb_id, code_type, bankname, sum(accountamount) as accountamount FROM virtualbank where vb_id =#{user_id} GROUP by vb_id, code_type, bankname
+</select>
+
+
+
+</mapper>
+
+
+
